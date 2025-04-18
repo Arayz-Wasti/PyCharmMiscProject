@@ -20,6 +20,7 @@ auth = firebase.auth()
 class SignUpRequest(BaseModel):
     email: str
     password: str
+
 @router.post("/signup")
 async def signup(request: SignUpRequest):
     print("Sign Up...")
