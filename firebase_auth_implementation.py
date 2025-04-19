@@ -2,7 +2,10 @@ import pyrebase
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/api",
+    tags=["firebase_auth"]
+)
 firebase_auth_config = {
     "apiKey": "AIzaSyC45JXA5uq-wmqtdFDoRTxy3eViHpZGvJg",
     "authDomain": "authimplementation-7f86d.firebaseapp.com",
@@ -24,9 +27,20 @@ class SignUpRequest(BaseModel):
 @router.post("/signup")
 async def signup(request: SignUpRequest):
     print("Sign Up...")
-    user = auth.create_user_with_email_and_password(request.email, request.password)
-    return {"message": "SUCCESS","user": user}
+    try:
+        user = auth.create_user_with_email_and_password(request.email, request.password)
+        return {"message": "SUCCESS","user": user}
+    except Exception as e:
+        return {"message": str(e)}
 
+@router.post("/login")
+async def login(request: SignUpRequest):
+    print("Log In...")
+    try:
+        user_login = auth.sign_in_with_email_and_password(request.email, request.password)
+        return {"message": "SUCCESS","user": user_login}
+    except Exception as e:
+        return {"message": str(e)}
 
 
 
